@@ -1,20 +1,65 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title> Título da Página </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <h1><strong>01</strong> Aula Inicial</h1>
+  <p>Este é um paragrafo, aqui podemos utilizar qualquer tag html.</p>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <h2>Interpolação</h2>
+  <p>{{ nome }}</p>
+
+  <p>{{ conveterMaiusculo() }}</p>
+
+  <h2>Event binding</h2>
+  <p>
+    Aqui um uso de event binding para realizar uma ação com determinado evento,
+    no caso, imprimir no console.
+  </p>
+  <ion-button (click)="exibir()" shape="round" fill="outline" color="success">
+    <ion-icon slot="start" name="terminal"></ion-icon>
+    Imprimir no console
+  </ion-button>
+
+  <h2>Diretivas Estruturais</h2>
+  <p>
+    <strong>ngIf</strong> :: Utiliza uma condição lógica para renderizar ou não
+    uma estrutura.
+  </p>
+  <p>
+    <strong>ngFor</strong> :: Utilizado para percorrer um laço de repetição e
+    inserindo conteúdos na página.
+  </p>
+  <ion-button
+    (click)="alterarShow()"
+    shape="round"
+    fill="outline"
+    color="success"
+  >
+    <ion-icon name="eye" *ngIf="show"/>
+    <ion-icon name="eye-off" *ngIf="!show"/>
+  </ion-button>
+
+  <h3 *ngIf="show">Listas</h3>
+
+  <ion-input label="Nome" [(ngModel)]="nome" placeholder="Informe um nome" />
+  <ion-button
+    (click)="adicionar()"
+    shape="round"
+    fill="outline"
+    color="success">
+    <ion-icon slot="start" name="person-add"/>
+    Adicionar
+  </ion-button>
+
+  <ion-list *ngIf="show">
+    <ion-list-header>
+      <ion-label>Alunos Presentes</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let item of nomes; let i = index">
+      <ion-label id="lista-item" (click)="excluir(i)">{{ (i + 1) + " :: " + item }}</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
