@@ -34,10 +34,10 @@
   </p>
 
   <h3>Inputs</h3>
-  <ion-input label="Nome" [(ngModel)]="nome" placeholder="Informe um nome" />
-  <ion-input label="Salário" [(ngModel)]="salario" type="number" placeholder="Informe um salário" />
+  <ion-input label="Nome" [(ngModel)]="pessoa.nome" placeholder="Informe um nome" />
+  <ion-input label="Salário" [(ngModel)]="pessoa.salario" type="number" placeholder="Informe um salário" />
   <ion-button (click)="adicionar()" shape="round" fill="outline" color="success">
-    <ion-icon slot="start" name="person-add" />
+    <ion-icon slot="start" name="person-add"/>
     Adicionar
   </ion-button>
 
