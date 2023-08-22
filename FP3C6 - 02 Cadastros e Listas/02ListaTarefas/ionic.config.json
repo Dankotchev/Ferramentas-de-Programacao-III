@@ -1,0 +1,7 @@
+{
+  "name": "02ListaTarefas",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
