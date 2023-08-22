@@ -25,3 +25,8 @@ div {
   justify-content: flex-end;
   gap: 10px; 
 }
+
+.button-col ion-button {
+  font-size: 80%; /* Reduz o tamanho da fonte do botão */
+  padding: 0.25em 0.5em; /* Ajusta o espaçamento interno do botão */
+}

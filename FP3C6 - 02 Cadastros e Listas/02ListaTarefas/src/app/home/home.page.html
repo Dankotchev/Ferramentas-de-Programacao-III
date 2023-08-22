@@ -18,8 +18,10 @@
     <div id="container">
       <ion-grid>
         <ion-row>
-          <ion-col size="6"><strong>Descrição</strong></ion-col>
-          <ion-col size="4"><strong>Status</strong></ion-col>
+          <ion-col size="2"><strong>Descrição</strong></ion-col>
+          <ion-col size="2"><strong>Status</strong></ion-col>
+          <ion-col size="2"><strong>Data de Criação</strong></ion-col>
+          <ion-col size="2"><strong>Data de Modificação</strong></ion-col>
           <ion-col size="2"></ion-col>
         </ion-row>
         <!-- Apesar de ainda não ter visto essa diretriz de ngClass, fui atras de algo para deixar
@@ -28,8 +30,10 @@
           'tarefa-cancelada': item.status === 'Cancelada',
           'tarefa-finalizada': item.status ==='Finalizada'
           }">
-          <ion-col size="6">{{ item.descricao }}</ion-col>
-          <ion-col size="4">{{ item.status }}</ion-col>
+          <ion-col size="2">{{ item.descricao }}</ion-col>
+          <ion-col size="2">{{ item.status }}</ion-col>
+          <ion-col size="2">{{ item.dataCriacao }}</ion-col>
+          <ion-col size="2">{{ item.dataModificacao }}</ion-col>
           <ion-col size="2" class="button-col" *ngIf="showComandos(i)">
             <ion-button (click)="excluir(i)" shape="round" fill="outline" color="danger">
               <ion-icon slot="start" name="trash" />

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-home',
@@ -33,6 +34,9 @@ export class HomePage {
       return;
     }
 
+    const dataCricao = format(new Date(), 'dd/MM/yyyy');
+    this.tarefa.dataCriacao = dataCricao;
+
     console.log(this.listaTarefas);
     this.tarefa.status = "Cadastrada";
     this.listaTarefas.unshift(this.tarefa);
@@ -48,11 +52,13 @@ export class HomePage {
 
   public finalizar(posicao: number) {
     this.listaTarefas[posicao].status = "Finalizada";
+    this.listaTarefas[posicao].dataModificacao = format(new Date(), 'dd/MM/yyyy');
     this.ordenarTarefas();
   }
 
   public cancelar(posicao: number) {
     this.listaTarefas[posicao].status = "Cancelada";
+    this.listaTarefas[posicao].dataModificacao = format(new Date(), 'dd/MM/yyyy');
     this.ordenarTarefas();
   }
 
