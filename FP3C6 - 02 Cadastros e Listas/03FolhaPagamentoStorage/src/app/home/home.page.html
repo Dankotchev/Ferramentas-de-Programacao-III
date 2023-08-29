@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Folha de Pagamento </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <h3>Inputs</h3>
+  <ion-input label="Nome" [(ngModel)]="pessoa.nome" placeholder="Informe um nome" />
+  <ion-input label="Salário" [(ngModel)]="pessoa.salario" type="number" placeholder="Informe um salário" />
+  <ion-button (click)="adicionar()" shape="round" fill="outline" color="success">
+    <ion-icon slot="start" name="person-add"/>
+    Adicionar
+  </ion-button>
+
+  <ion-button (click)="maiorSalario()" shape="round" fill="outline" color="success" *ngIf="showButton()">
+    <ion-icon slot="start" name="cash"/>
+    Maior salário
+  </ion-button>
+
+  <ion-button (click)="medioSalario()" shape="round" fill="outline" color="success" *ngIf="showButton()">
+    <ion-icon slot="start" name="cash"/>
+    Salário médio
+  </ion-button>
+
+  <ion-button (click)="menorSalario()" shape="round" fill="outline" color="success" *ngIf="showButton()">
+    <ion-icon slot="start" name="cash"/>
+    Menor salário
+  </ion-button>
+
+  <h3>Grid</h3>
+  <div id="container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6"><strong>Nome</strong></ion-col>
+        <ion-col size="4"><strong>Salário</strong></ion-col>
+        <ion-col size="2"></ion-col>
+      </ion-row>
+      <ion-row *ngFor="let item of listaPessoas; let i = index">
+        <ion-col size="6">{{ item.nome }}</ion-col>
+        <!-- Aplicar um estilo, a depender dos valores ::
+            primeiro o atributo entre [] e dentro das {} um par "estilo" e condição -->
+        <ion-col size="4" [class]="{'azul' : item.salario > 2000}">{{ item.salario }}</ion-col>
+        <ion-col size="2" id="grid-item-excluir" (click)="excluirPessoa(i)"><ion-icon name="trash" /></ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
