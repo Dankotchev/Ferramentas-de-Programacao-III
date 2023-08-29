@@ -10,6 +10,7 @@ Repositório contendo resoluções de atividades, listas de exercícios e provas
 *Tópicos estudados:*
 * TypeScript
 * Ionic
+	* Ionic Storage
 * Angular
 * Node.js
 

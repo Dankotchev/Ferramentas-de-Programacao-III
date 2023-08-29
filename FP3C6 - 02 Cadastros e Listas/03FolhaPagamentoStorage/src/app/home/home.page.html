@@ -29,6 +29,11 @@
     Menor salário
   </ion-button>
 
+  <ion-button (click)="removerTudo()" shape="round" fill="outline" color="danger" *ngIf="showButton()">
+    <ion-icon slot="start" name="close-circle"/>
+    Remover dados
+  </ion-button>
+
   <h3>Grid</h3>
   <div id="container">
     <ion-grid>
