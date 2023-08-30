@@ -1,7 +1,0 @@
-{
-  "name": "03FolhaPagamentoStorage",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}

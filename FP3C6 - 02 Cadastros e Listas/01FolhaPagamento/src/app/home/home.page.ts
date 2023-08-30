@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,7 @@ export class HomePage {
   public pessoa: any = {};
 
   // Construtor
-  constructor(private toastController: ToastController) { }
+  constructor(private toastController: ToastController, private storage: Storage) {}
 
   // Métodos
   public showButton(): boolean {
@@ -48,11 +49,18 @@ export class HomePage {
 
   public excluirPessoa(indice: number) {
     let valor = this.listaPessoas.splice(indice, 1);
-    console.log(valor);
+
+    // Após remover do array, atualiza o storage
+    this.storage.set("PESSOAS", this.listaPessoas);
+  }
+
+  public removerTudo(){
+    // Apaga por completo o "storage" informado
+    this.storage.remove("PESSOAS");
+    this.listaPessoas = [];
   }
 
   public adicionar() {
-    console.log(this.pessoa.nome);
     if (this.pessoa.nome == undefined || this.pessoa.nome.length < 3) {
       this.exibirMensagem('Nome deve conter mais de 3 caracteres');
       return;
@@ -62,6 +70,8 @@ export class HomePage {
       return;
     }
     this.listaPessoas.unshift(this.pessoa);
+    
+    this.storage.set("PESSOAS", this.listaPessoas);
     this.exibirMensagem('Pessoa adicionada');
     this.pessoa = {};
   }
@@ -74,7 +84,19 @@ export class HomePage {
       duration: 550,
       position: 'bottom',
     });
-
     await toast.present();
+  }
+
+  // Ao criar a classe, automaticamente é executado este método do Ionic Storage
+  async ngOnInit() {
+    await this.storage.create();
+
+    // Recuperando do storage os dados armazenados
+    const pessoas = await this.storage.get("PESSOAS"); 
+
+    if(pessoas == null)
+      this.listaPessoas = [];
+    else
+      this.listaPessoas = pessoas;
   }
 }
