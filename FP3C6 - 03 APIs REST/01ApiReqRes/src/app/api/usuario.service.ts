@@ -5,13 +5,15 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class UsuarioService {
-  private urlBase = "https://reqres.in";
+  private readonly urlBase = 'https://reqres.in/api/';
 
   constructor(private http: HttpClient) {}
 
   // Métodos
   //Obter lista de usuários da API
-  public getUsuarios(){
-    return this.http.get(`${this.urlBase}/api/users`).toPromise();
+  public getUsuarios(pagina: number) {
+    return this.http
+      .get(`${this.urlBase}users?page=${pagina}`)
+      .toPromise();
   }
 }

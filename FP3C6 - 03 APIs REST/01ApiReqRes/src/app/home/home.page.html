@@ -1,20 +1,35 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      API ReqRes
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div>
+    <ion-list lines="inset">
+      <ion-item *ngFor="let usuario of dadosAPI.data">
+        <ion-avatar slot="end">
+          <img src={{usuario.avatar}}>
+          <!-- <img [src]="usuario.avatar"> -->
+        </ion-avatar>
+        <ion-label>
+          {{usuario.first_name + ' ' +usuario.last_name}}
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div>
+    <ion-button (click)="paginaAnterior()" shape="round" fill="outline" color="success" [disabled]="getPaginaAtual()==1">
+      <ion-icon slot="start" name="arrow-back"/>
+      Página anterior
+    </ion-button>
+  
+    <ion-button (click)="paginaProxima()" shape="round" fill="outline" color="success" [disabled]="getPaginaAtual()==dadosAPI.total_pages">
+      <ion-icon slot="end" name="arrow-forward"/>
+      Próxima página
+    </ion-button>
   </div>
 </ion-content>
