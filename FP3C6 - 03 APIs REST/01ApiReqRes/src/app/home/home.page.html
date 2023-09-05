@@ -1,34 +1,50 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      API ReqRes
-    </ion-title>
+    <ion-title> API ReqRes </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div>
+    <!-- Componente de pesquisa, dentro da página apresentada-->
+    <ion-searchbar
+      color="medium"
+      animated="true"
+      placeholder="Pesquisar"
+      show-clear-button="focus"
+      [debounce]="1000"
+      (ionChange)="pesquisar($event)"/>
     <ion-list lines="inset">
-      <ion-item *ngFor="let usuario of dadosAPI.data">
+      <ion-item *ngFor="let usuario of dadosUsers">
         <ion-avatar slot="end">
-          <img src={{usuario.avatar}}>
+          <img src="{{usuario.avatar}}" />
           <!-- <img [src]="usuario.avatar"> -->
         </ion-avatar>
-        <ion-label>
-          {{usuario.first_name + ' ' +usuario.last_name}}
-        </ion-label>
+        <ion-label> {{usuario.first_name + ' ' +usuario.last_name}} </ion-label>
       </ion-item>
     </ion-list>
   </div>
 
   <div>
-    <ion-button (click)="paginaAnterior()" shape="round" fill="outline" color="success" [disabled]="getPaginaAtual()==1">
-      <ion-icon slot="start" name="arrow-back"/>
+    <ion-button
+      (click)="paginaAnterior()"
+      shape="round"
+      fill="outline"
+      color="success"
+      [disabled]="getPaginaAtual()==1"
+    >
+      <ion-icon slot="start" name="arrow-back" />
       Página anterior
     </ion-button>
-  
-    <ion-button (click)="paginaProxima()" shape="round" fill="outline" color="success" [disabled]="getPaginaAtual()==dadosAPI.total_pages">
-      <ion-icon slot="end" name="arrow-forward"/>
+
+    <ion-button
+      (click)="paginaProxima()"
+      shape="round"
+      fill="outline"
+      color="success"
+      [disabled]="getPaginaAtual()==dadosAPI.total_pages"
+    >
+      <ion-icon slot="end" name="arrow-forward" />
       Próxima página
     </ion-button>
   </div>

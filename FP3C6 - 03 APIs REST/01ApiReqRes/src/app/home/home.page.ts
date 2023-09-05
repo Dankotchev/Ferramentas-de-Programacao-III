@@ -8,6 +8,7 @@ import { UsuarioService } from '../api/usuario.service';
 })
 export class HomePage {
   public dadosAPI: any = {};
+  public dadosUsers: any = {};
   private paginaAtual: number = 1;
 
   constructor(private usuarioService: UsuarioService) {
@@ -31,6 +32,11 @@ export class HomePage {
     return this.paginaAtual;
   }
 
+  public pesquisar(event: any){
+    const consulta = event.target.value.toLowerCase();
+    this.dadosUsers = this.dadosAPI.data.filter((d: any) => d.first_name.toLowerCase().indexOf(consulta) > -1);
+  }
+
   private async getUsuarios(pagina: number) {
     // Requisição assincrona
     this.usuarioService
@@ -38,7 +44,8 @@ export class HomePage {
       .then((resultado) => {
         // then, caso tenha sucesso
         this.dadosAPI = resultado;
-        // console.log('2222');
+        this.dadosUsers = this.dadosAPI.data;
+        console.log(resultado);
       })
       .catch(() => {
         // catch, caso ocorra algum erro
