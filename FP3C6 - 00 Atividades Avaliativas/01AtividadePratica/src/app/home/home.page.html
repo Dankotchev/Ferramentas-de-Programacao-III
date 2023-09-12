@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Atividade Pratica I </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div>
+    <!-- Componente de pesquisa, dentro da página apresentada-->
+    <ion-input label="Pesquisar" [(ngModel)]="precoMaximo" type="number" placeholder="Informe o preço máximo" />
+    <ion-button (click)="pesquisar()" shape="round" fill="outline" color="success">
+      Pesquisar
+    </ion-button>
+
+    <ion-grid lines="inset">
+      <ion-row>
+        <ion-col size="2"><strong>Nome</strong></ion-col>
+        <ion-col size="3"><strong>Preço</strong></ion-col>
+        <ion-col size="4"><strong>Descrição</strong></ion-col>
+        <ion-col size="2"></ion-col>
+      </ion-row>
+
+      <ion-row *ngFor="let produto of listaProdutos, let i = index">
+        <ion-col size="2">{{ produto.nome }}</ion-col>
+        <ion-col size="3">{{ produto.preco }}</ion-col>
+        <ion-col size="4">{{ produto.descricao }}</ion-col>
+        <ion-col size="2" id="grid-item-excluir" (click)="excluirProduto(i)"><ion-icon name="trash" /></ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </div>
+</ion-content>
