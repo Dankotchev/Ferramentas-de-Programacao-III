@@ -17,7 +17,7 @@ export class HomePage {
   }
 
   public pesquisar() {
-    this.listaProdutos = this.dadosAPI;
+    this.listaProdutos = [...this.dadosAPI];
     if (this.precoMaximo > 0)
       this.listaProdutos = this.listaProdutos.filter((produto: any) => Number(produto.preco) <= this.precoMaximo);
     else if (this.precoMaximo < 0)
@@ -32,7 +32,6 @@ export class HomePage {
     let soma: number = 0;
 
     this.listaProdutos.forEach((element: any) => {
-      console.log(element);
       soma += Number(element.preco);
     });
     return soma;
@@ -42,8 +41,8 @@ export class HomePage {
     this.produtoService
       .getProdutos()
       .then((resultado: any) => {
-        this.dadosAPI = resultado;
-        this.listaProdutos = resultado;
+        this.dadosAPI = [...resultado];
+        this.listaProdutos = [...resultado];
       })
       .catch(() => {
       });
