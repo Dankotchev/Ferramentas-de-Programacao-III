@@ -31,20 +31,14 @@ export class HomePage {
     this.listaProdutos.splice(i, 1);
   }
 
-  public somaPesquisa() {
+  public somatorio() : number{
     let soma: number = 0;
 
     this.listaProdutos.forEach((element: any) => {
       console.log(element);
-      soma += element.preco;
+      soma += Number(element.preco);
     });
-
-
-
-    //soma = this.listaProdutos.reduce((somatoria: number, produto: any) => somatoria + produto.preco);
-
-    // let soma = this.listaProdutos.preco.reduce((somatoria: any, valorAtual: any) => somatoria + valorAtual, 0);
-    //console.log(soma);
+    return soma;
   }
 
   private async getProdutos() {
