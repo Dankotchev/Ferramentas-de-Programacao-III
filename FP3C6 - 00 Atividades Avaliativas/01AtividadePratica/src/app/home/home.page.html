@@ -22,7 +22,7 @@
 
       <ion-row *ngFor="let produto of listaProdutos, let i = index">
         <ion-col size="2">{{ produto.nome }}</ion-col>
-        <ion-col size="3">{{ produto.preco }}</ion-col>
+        <ion-col size="3">{{ produto.preco | currency}}</ion-col>
         <ion-col size="4">{{ produto.descricao }}</ion-col>
         <ion-col size="2" id="grid-item-excluir" (click)="excluirProduto(i)"><ion-icon name="trash" /></ion-col>
       </ion-row>

@@ -17,10 +17,12 @@ export class HomePage {
   }
 
   public pesquisar() {
-    if (this.precoMaximo > 0)
-      this.listaProdutos = this.listaProdutos.filter((produto:any) => produto.preco <= this.precoMaximo);
+    if (this.precoMaximo > 0) {
+      this.listaProdutos = this.dadosAPI;
+      this.listaProdutos = this.listaProdutos.filter((produto: any) => produto.preco <= this.precoMaximo);
+    }
     else if (this.precoMaximo == 0)
-      this.getProdutos();
+      this.listaProdutos = this.dadosAPI;
     else
       this.exibirMensagem("Valor pesquisado deve ser maior que 0");
   }
@@ -30,9 +32,9 @@ export class HomePage {
   }
 
   public somaPesquisa() {
-    let soma : number = 0;
+    let soma: number = 0;
 
-    this.listaProdutos.forEach((element:any) => {
+    this.listaProdutos.forEach((element: any) => {
       console.log(element);
       soma += element.preco;
     });
