@@ -17,13 +17,10 @@ export class HomePage {
   }
 
   public pesquisar() {
-    if (this.precoMaximo > 0) {
-      this.listaProdutos = this.dadosAPI;
-      this.listaProdutos = this.listaProdutos.filter((produto: any) => produto.preco <= this.precoMaximo);
-    }
-    else if (this.precoMaximo == 0)
-      this.listaProdutos = this.dadosAPI;
-    else
+    this.listaProdutos = this.dadosAPI;
+    if (this.precoMaximo > 0)
+      this.listaProdutos = this.listaProdutos.filter((produto: any) => Number(produto.preco) <= this.precoMaximo);
+    else if (this.precoMaximo < 0)
       this.exibirMensagem("Valor pesquisado deve ser maior que 0");
   }
 
@@ -52,7 +49,7 @@ export class HomePage {
       });
   }
 
-  async exibirMensagem(mensagem: string) {
+  private async exibirMensagem(mensagem: string) {
     const toast = await this.toastController.create({
       message: mensagem,
       duration: 550,
