@@ -28,13 +28,8 @@ export class HomePage {
     this.listaProdutos.splice(i, 1);
   }
 
-  public somatorio() : number{
-    let soma: number = 0;
-
-    this.listaProdutos.forEach((element: any) => {
-      soma += Number(element.preco);
-    });
-    return soma;
+  public somatorio(): number {
+    return this.listaProdutos.reduce((valor: number, produto: any) => valor + Number(produto.preco), 0);
   }
 
   private async getProdutos() {
