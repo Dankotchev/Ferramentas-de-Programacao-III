@@ -1,4 +1,5 @@
-import express from "express";
+import express from 'express';
+import './database/connection';
 
 const PORT = process.env.PORT || 3333;
 
