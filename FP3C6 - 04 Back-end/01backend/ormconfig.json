@@ -6,5 +6,9 @@
   "password": "ifsp",
   "database": "db_aula",
   "synchronize": false,
-  "logging": false
+  "logging": false,
+  "migrations": ["./src/database/migrations/*.ts"],
+  "cli": {
+    "migrationsDir": "./src/database/migrations"
+  }
 }
