@@ -10,4 +10,7 @@ routes.post("/users", UsersController.create);
 // GET /index ==> Retorna todos os usuários
 routes.get("/users", UsersController.index);
 
+// GET /users/id ==> Pesquisa por id
+routes.get("/users/:id", UsersController.show);
+
 export default routes;

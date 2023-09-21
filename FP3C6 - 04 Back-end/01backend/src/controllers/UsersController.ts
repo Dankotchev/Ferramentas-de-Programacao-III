@@ -33,4 +33,11 @@ export default {
     const users = await userRepository.find();
     resposta.json(users);
   },
+
+  async show(requisicao: Request, resposta: Response) {
+    const { id } = requisicao.params;
+    const userRepository = getRepository(User);
+    const user = await userRepository.findOneOrFail(id);
+    resposta.json(user);
+  },
 };
