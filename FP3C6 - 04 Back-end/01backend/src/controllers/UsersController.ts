@@ -27,4 +27,10 @@ export default {
   },
 
   // Outra função
+  // Lista todos os usuários
+  async index(requisicao: Request, resposta: Response) {
+    const userRepository = getRepository(User);
+    const users = await userRepository.find();
+    resposta.json(users);
+  },
 };

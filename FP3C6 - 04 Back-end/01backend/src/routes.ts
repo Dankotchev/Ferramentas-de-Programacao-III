@@ -7,4 +7,7 @@ const routes = Router();
 // post /users
 routes.post("/users", UsersController.create);
 
+// GET /index ==> Retorna todos os usuários
+routes.get("/users", UsersController.index);
+
 export default routes;
