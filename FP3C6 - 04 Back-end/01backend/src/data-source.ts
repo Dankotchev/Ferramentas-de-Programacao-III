@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 
-import { createUser1695154116749 } from './database/migrations/1695154116749-create_user';
-import { createProduct1695755545038 } from './database/migrations/1695755545038-create_product';
+import { CreateUser1695154116749 } from './database/migrations/1695154116749-CreateUser';
+import { CreateProduct1695755545038 } from './database/migrations/1695755545038-CreateProduct';
 import { CreatePostTable1695759541556 } from './database/migrations/1695759541556-CreatePostTable';
 import { CreateImageTable1695759550415 } from './database/migrations/1695759550415-CreateImageTable';
 
@@ -22,8 +22,8 @@ export const AppDataSource = new DataSource({
   logging: false,
   entities: [User, Product, Post, Image],
   migrations: [
-    createUser1695154116749,
-    createProduct1695755545038,
+    CreateUser1695154116749,
+    CreateProduct1695755545038,
     CreatePostTable1695759541556,
     CreateImageTable1695759550415,
   ],
