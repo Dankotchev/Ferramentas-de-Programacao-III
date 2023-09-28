@@ -17,7 +17,7 @@ export const AppDataSource = new DataSource({
   port: 3306,
   username: 'root',
   password: 'ifsp',
-  database: 'db_aula',
+  database: 'db_01Backend',
   synchronize: false,
   logging: false,
   entities: [User, Product, Post, Image],
