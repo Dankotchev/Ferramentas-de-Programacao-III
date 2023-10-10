@@ -30,6 +30,8 @@ routes.delete('/products/:id', ProductsController.delete);
  */
 routes.get("/posts", PostController.index);
 routes.get("/posts/:id", PostController.show);
+routes.get("/posts/message/:message", PostController.findByMessageParams);
+routes.get("/posts/message", PostController.findByMessageQuery);
 routes.post("/posts", upload.array("images"), PostController.create);
 
 export default routes;
