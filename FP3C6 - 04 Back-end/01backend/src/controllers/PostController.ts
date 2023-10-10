@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../data-source';
 import Post from '../models/Post';
+import postView from '../views/post-view';
 
 export default {
   async index(requisicao: Request, resposta: Response) {
-
     const postRepository = AppDataSource.getRepository(Post);
     const posts = await postRepository.find({
       relations: ['images'],
     });
 
-    resposta.json(posts);
+    resposta.json(postView.renderMany(posts));
   },
 
   async show(requisicao: Request, resposta: Response) {
@@ -23,8 +23,12 @@ export default {
       relations: { images: true },
     });
 
-    console.log(post);
-    resposta.json(post);
+    if (post)
+      return resposta.json(postView.render(post));
+
+    return resposta.status(404).json({
+      message: 'Post not found.',
+    });
   },
 
   async create(requisicao: Request, resposta: Response) {
