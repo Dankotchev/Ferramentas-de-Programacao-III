@@ -14,6 +14,7 @@ export const AppDataSource = new DataSource({
   username: 'root',
   password: 'ifsp',
   database: 'db_avaliacao',
+  migrationsRun: true,
   synchronize: false,
   logging: false,
   entities: [Nivel, Curso, Disciplina],

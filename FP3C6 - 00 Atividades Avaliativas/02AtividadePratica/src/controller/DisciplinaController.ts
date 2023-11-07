@@ -9,17 +9,6 @@ export default {
     const disciplinaRepository = AppDataSource.getRepository(Disciplina);
 
     const disciplina = await disciplinaRepository.find({
-      // select: {
-      //   nome: true,
-      //   codigo: true,
-      //   curso: {
-      //     nivelCodigo: {
-      //       nome: true,
-      //       codigo: true,
-      //     },
-      //   },
-      // },
-
       where: {
         nome: Like(`%${nome}%`),
       },
@@ -31,7 +20,16 @@ export default {
       },
     });
 
-    resposta.json(disciplina);
+    const resultado = disciplina.map((disciplina) => {
+      return {
+        codigoDisciplina: disciplina.codigo,
+        nomeDisciplina: disciplina.nome,
+        nomeCurso: disciplina.curso.nome,
+        nivelCurso: disciplina.curso.nivel.nome,
+      };
+    });
+
+    resposta.json(resultado);
   },
   async create(requisicao: Request, resposta: Response) {
     console.log(requisicao.body);

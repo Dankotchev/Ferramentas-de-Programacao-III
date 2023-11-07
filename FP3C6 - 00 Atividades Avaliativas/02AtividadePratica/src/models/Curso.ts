@@ -15,7 +15,7 @@ export default class Curso {
 
   @ManyToOne(() => Nivel, nivel => nivel.cursos)
   @JoinColumn({ name: "nivel_codigo"})
-  nivel: Nivel[];
+  nivel: Nivel;
 
   @OneToMany(() => Disciplina, disciplina => disciplina.curso, {
     cascade: ["insert", "update", "remove"]
