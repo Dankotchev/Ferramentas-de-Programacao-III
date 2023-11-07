@@ -9,8 +9,8 @@ export default class Nivel {
   @Column()
   nome: string;
 
-  @OneToMany(() => Curso, curso => curso.nivel, {
+  @OneToMany(() => Curso, cursos => cursos.nivel, {
     cascade: ["insert", "update", "remove"]
   })
-  curso: Curso[];
+  cursos: Curso[];
 }

@@ -9,7 +9,7 @@ export default class Disciplina {
   @Column()
   nome: string;
 
-  @ManyToOne(() => Curso, curso => curso.disciplina)
+  @ManyToOne(() => Curso, curso => curso.disciplinas)
   @JoinColumn({ name: "curso_codigo"})
   curso: Curso
 }

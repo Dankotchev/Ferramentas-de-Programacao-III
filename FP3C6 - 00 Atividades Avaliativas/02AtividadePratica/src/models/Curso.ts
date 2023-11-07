@@ -13,12 +13,12 @@ export default class Curso {
   @Column()
   periodo: string;
 
-  @ManyToOne(() => Nivel, nivel => nivel.curso)
+  @ManyToOne(() => Nivel, nivel => nivel.cursos)
   @JoinColumn({ name: "nivel_codigo"})
   nivel: Nivel[];
 
   @OneToMany(() => Disciplina, disciplina => disciplina.curso, {
     cascade: ["insert", "update", "remove"]
   })
-  disciplina: Disciplina[];
+  disciplinas: Disciplina[];
 }
