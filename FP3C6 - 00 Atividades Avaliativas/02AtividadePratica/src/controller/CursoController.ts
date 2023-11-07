@@ -11,9 +11,8 @@ export default {
 
     const curso = await cursoRepository.find({
       where: {
-
         nivel: {
-          codigo: Like(`%${nivel}%`)
+          codigo: +nivel,
         },
       },
     });
@@ -31,11 +30,9 @@ export default {
       },
 
       relations: {
-        disciplina: {
-          nome: true,
-        },
+        nivel: true,
+        disciplinas: true,
       },
-
     });
 
     resposta.json(curso);
