@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import CursoController from './controller/CursoController';
-import Disciplina from './models/Disciplina';
 import DisciplinaController from './controller/DisciplinaController';
 
 const routes = Router();
