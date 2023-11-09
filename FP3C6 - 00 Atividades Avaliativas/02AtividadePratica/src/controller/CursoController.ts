@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { Like } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import Curso from '../models/Curso';
-import Disciplina from '../models/Disciplina';
 
 export default {
   async findByNivel(requisicao: Request, resposta: Response) {
@@ -47,26 +46,26 @@ export default {
         .json({ erro: 'Código de curso não informado.' });
 
     const cursoRepository = AppDataSource.getRepository(Curso);
-    const DisciplinaRepository = AppDataSource.getRepository(Disciplina);
 
-    const curso = await cursoRepository.findOneByOrFail({
-      codigo: +codigo,
+    const curso = await cursoRepository.findOne({
+      where: {
+        codigo: +codigo,
+      },
+      relations: {
+        disciplinas: true,
+      },
     });
-
-    const disciplinas = await DisciplinaRepository.findBy({
-      curso: curso,
-    });
-
-    if (disciplinas.length != 0) {
-      return resposta
-        .status(400)
-        .json({ erro: 'Curso possui disciplinas cadastradas' });
-    }
 
     if (curso) {
-      await cursoRepository.remove(curso);
-      return resposta.status(204).json(curso);
-    }
-    resposta.status(404).json({ erro: 'Curso não existe.' });
+      if (curso.disciplinas.length == 0)
+        // Não tem disciplinas, pode remover
+        await cursoRepository.remove(curso);
+      else
+        return resposta.status(406).json({erro: 'Curso não pode ser excluido. Possui disciplinas vinculadas'});
+      // Tem disciplinas, não pode remover
+    } else
+      resposta.status(404).json({ erro: 'Curso não existe.' });
+
+    return resposta.status(204).json(curso);
   },
 };
