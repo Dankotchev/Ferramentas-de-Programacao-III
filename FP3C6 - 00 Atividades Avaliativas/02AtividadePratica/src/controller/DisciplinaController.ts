@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Like } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import Disciplina from '../models/Disciplina';
+import Curso from '../models/Curso';
 
 export default {
   async findByNome(requisicao: Request, resposta: Response) {
@@ -33,15 +34,26 @@ export default {
   },
   async create(requisicao: Request, resposta: Response) {
     console.log(requisicao.body);
-    const { nome, curso } = requisicao.body;
-    const disciplinaRepository = AppDataSource.getRepository(Disciplina);
+    const { nome, codigoCurso } = requisicao.body;
 
-    const disciplina = disciplinaRepository.create({
-      nome,
-      curso,
+    const cursoRepository = AppDataSource.getRepository(Curso);
+    const curso = await cursoRepository.findOne({
+      where: {
+        codigo: codigoCurso,
+      },
     });
 
-    await disciplinaRepository.save(disciplina);
-    return resposta.status(201).json(disciplina);
+    if (curso) {
+      const disciplinaRepository = AppDataSource.getRepository(Disciplina);
+      const disciplina = disciplinaRepository.create({
+        nome,
+        curso,
+      });
+
+      await disciplinaRepository.save(disciplina);
+      return resposta.status(201).json(disciplina);
+    }
+
+    return resposta.status(404).json({ erro: 'Curso não existe.' });
   },
 };
