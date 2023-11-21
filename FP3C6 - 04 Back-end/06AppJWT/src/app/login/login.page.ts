@@ -13,12 +13,15 @@ export class LoginPage implements OnInit {
     this.login();
   }
 
+  public email: string = "";
+  public senha: string = "";
+
   ngOnInit() {}
 
   async login() {
     const usuario = {
-      email: 'user1@email.com',
-      senha: 'user1',
+      email: this.email,
+      senha: this.senha,
     };
     const retorno = await this.authentication.login(usuario);
 
