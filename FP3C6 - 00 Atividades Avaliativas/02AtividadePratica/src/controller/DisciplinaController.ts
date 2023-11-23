@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { Like } from 'typeorm';
+import * as Yup from 'yup';
+
 import { AppDataSource } from '../data-source';
 import Disciplina from '../models/Disciplina';
 import Curso from '../models/Curso';
@@ -33,27 +35,39 @@ export default {
     resposta.json(resultado);
   },
   async create(requisicao: Request, resposta: Response) {
-    console.log(requisicao.body);
-    const { nome, codigoCurso } = requisicao.body;
-
-    const cursoRepository = AppDataSource.getRepository(Curso);
-    const curso = await cursoRepository.findOne({
-      where: {
-        codigo: codigoCurso,
-      },
+    const regras = Yup.object().shape({
+      nome: Yup.string().required('Informe um nome para a disciplina'),
+      curso: Yup.number().positive().integer().required('Informe um curso.'),
     });
 
-    if (curso) {
-      const disciplinaRepository = AppDataSource.getRepository(Disciplina);
-      const disciplina = disciplinaRepository.create({
-        nome,
-        curso,
+    try {
+      const disciplina = await regras.validate(requisicao.body, {
+        abortEarly: false,
       });
 
-      await disciplinaRepository.save(disciplina);
-      return resposta.status(201).json(disciplina);
-    }
+      const cursoRepository = AppDataSource.getRepository(Curso);
+      const cursoDisciplina = await cursoRepository.findOne({
+        where: {
+          codigo: disciplina.curso,
+        },
+      });
 
-    return resposta.status(404).json({ erro: 'Curso não existe.' });
+      if (cursoDisciplina) {
+        const disciplinaRepository = AppDataSource.getRepository(Disciplina);
+        const disciplinaSalvar = disciplinaRepository.create({
+          nome: disciplina.nome,
+          curso: cursoDisciplina,
+        });
+
+        await disciplinaRepository.save(disciplinaSalvar);
+        return resposta.status(201).json(disciplinaSalvar);
+      }
+
+      return resposta.status(404).json({ erro: 'Curso não existe.' });
+    } catch (error: any) {
+      // Apresenta os erros que surgem da validação
+      console.log(error);
+      resposta.status(400).json({ Erro: error.errors });
+    }
   },
 };

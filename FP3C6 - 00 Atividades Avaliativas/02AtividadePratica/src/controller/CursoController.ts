@@ -1,9 +1,61 @@
 import { Request, Response } from 'express';
 import { Like } from 'typeorm';
+import * as Yup from "yup";
+
 import { AppDataSource } from '../data-source';
 import Curso from '../models/Curso';
+import Nivel from '../models/Nivel';
 
 export default {
+  async create (requisicao: Request, resposta: Response){
+
+
+    // Regras de validação
+    const regras = Yup.object().shape({
+      nome: Yup.string().required("Informe um nome de curso."),
+      periodo: Yup.string().required("Informe um período."),
+      nivel: Yup.number().positive().integer().required("Informe um nível.")
+    });
+
+    // Validação
+    try {
+      const curso = await regras.validate(requisicao.body, {
+        abortEarly: false,
+      });
+      // Após validação, retorna o objeto, podendo ser utilizado para salvar no banco de dados
+      // Salvar em banco
+
+      // Buscar o nível para o curso
+      const nivelRepository = AppDataSource.getRepository(Nivel);
+      const nivel = await nivelRepository.findOne({
+        where: {
+          codigo: curso.nivel,
+        },
+      })
+
+      // Se existir o nível, salva o novo curso
+      if (nivel) {
+        const cursoRepository = AppDataSource.getRepository(Curso);
+        const cursoInserir = cursoRepository.create({
+          nome: curso.nome,
+          periodo: curso.periodo,
+          nivel
+        })
+
+        await cursoRepository.save(cursoInserir);
+        resposta.status(201).json(cursoInserir);
+      }
+      // Não existe o nível
+      return resposta.status(404).json({ erro: 'Nível não existente.' });
+
+
+    } catch (error: any) {
+      // Apresenta os erros que surgem da validação
+      console.log(error);
+      resposta.status(400).json({ Erro: error.errors });
+    }
+  },
+
   async findByNivel(requisicao: Request, resposta: Response) {
     const { nivel } = requisicao.params;
     const cursoRepository = AppDataSource.getRepository(Curso);
