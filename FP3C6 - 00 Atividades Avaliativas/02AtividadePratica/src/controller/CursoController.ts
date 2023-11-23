@@ -43,7 +43,7 @@ export default {
         })
 
         await cursoRepository.save(cursoInserir);
-        resposta.status(201).json(cursoInserir);
+        return resposta.status(201).json(cursoInserir);
       }
       // Não existe o nível
       return resposta.status(404).json({ erro: 'Nível não existente.' });

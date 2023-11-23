@@ -6,6 +6,8 @@ const routes = Router();
 
 routes.get('/curso/nivel/:nivel', CursoController.findByNivel);
 routes.get('/curso/nome/:nome', CursoController.findByNome);
+routes.post('/curso', CursoController.create);
+
 routes.get('/disciplinas/:nome', DisciplinaController.findByNome);
 routes.delete('/curso/:codigo', CursoController.delete);
 routes.post('/disciplinas', DisciplinaController.create);
