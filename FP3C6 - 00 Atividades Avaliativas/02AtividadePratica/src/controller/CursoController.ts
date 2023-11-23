@@ -1,20 +1,18 @@
 import { Request, Response } from 'express';
 import { Like } from 'typeorm';
-import * as Yup from "yup";
+import * as Yup from 'yup';
 
 import { AppDataSource } from '../data-source';
 import Curso from '../models/Curso';
 import Nivel from '../models/Nivel';
 
 export default {
-  async create (requisicao: Request, resposta: Response){
-
-
+  async create(requisicao: Request, resposta: Response) {
     // Regras de validação
     const regras = Yup.object().shape({
-      nome: Yup.string().required("Informe um nome de curso."),
-      periodo: Yup.string().required("Informe um período."),
-      nivel: Yup.number().positive().integer().required("Informe um nível.")
+      nome: Yup.string().required('Informe um nome de curso.'),
+      periodo: Yup.string().required('Informe um período.'),
+      nivel: Yup.number().positive().integer().required('Informe um nível.'),
     });
 
     // Validação
@@ -31,7 +29,7 @@ export default {
         where: {
           codigo: curso.nivel,
         },
-      })
+      });
 
       // Se existir o nível, salva o novo curso
       if (nivel) {
@@ -39,21 +37,61 @@ export default {
         const cursoInserir = cursoRepository.create({
           nome: curso.nome,
           periodo: curso.periodo,
-          nivel
-        })
+          nivel,
+        });
 
         await cursoRepository.save(cursoInserir);
         return resposta.status(201).json(cursoInserir);
       }
       // Não existe o nível
       return resposta.status(404).json({ erro: 'Nível não existente.' });
-
-
     } catch (error: any) {
       // Apresenta os erros que surgem da validação
       console.log(error);
       resposta.status(400).json({ Erro: error.errors });
     }
+  },
+
+  async index(requisicao: Request, resposta: Response) {
+    const cursoRepository = AppDataSource.getRepository(Curso);
+    const cursos = cursoRepository.find();
+    return resposta.status(201).json(cursos);
+  },
+
+  async update(requisicao: Request, resposta: Response) {},
+
+  // Tratar exceções, passar validação, tal como em disciplina
+  async delete(requisicao: Request, resposta: Response) {
+    const { codigo } = requisicao.params;
+
+    if (codigo == null)
+      return resposta
+        .status(406)
+        .json({ erro: 'Código de curso não informado.' });
+
+    const cursoRepository = AppDataSource.getRepository(Curso);
+
+    const curso = await cursoRepository.findOne({
+      where: {
+        codigo: +codigo,
+      },
+      relations: {
+        disciplinas: true,
+      },
+    });
+
+    if (curso) {
+      if (curso.disciplinas.length == 0)
+        // Não tem disciplinas, pode remover
+        await cursoRepository.remove(curso);
+      else
+        return resposta.status(406).json({
+          erro: 'Curso não pode ser excluido. Possui disciplinas vinculadas',
+        });
+      // Tem disciplinas, não pode remover
+    } else return resposta.status(404).json({ erro: 'Curso não existe.' });
+
+    return resposta.status(204).json(curso);
   },
 
   async findByNivel(requisicao: Request, resposta: Response) {
@@ -87,37 +125,5 @@ export default {
     });
 
     resposta.json(curso);
-  },
-
-  async delete(requisicao: Request, resposta: Response) {
-    const { codigo } = requisicao.params;
-
-    if (codigo == null)
-      return resposta
-        .status(406)
-        .json({ erro: 'Código de curso não informado.' });
-
-    const cursoRepository = AppDataSource.getRepository(Curso);
-
-    const curso = await cursoRepository.findOne({
-      where: {
-        codigo: +codigo,
-      },
-      relations: {
-        disciplinas: true,
-      },
-    });
-
-    if (curso) {
-      if (curso.disciplinas.length == 0)
-        // Não tem disciplinas, pode remover
-        await cursoRepository.remove(curso);
-      else
-        return resposta.status(406).json({erro: 'Curso não pode ser excluido. Possui disciplinas vinculadas'});
-      // Tem disciplinas, não pode remover
-    } else
-      resposta.status(404).json({ erro: 'Curso não existe.' });
-
-    return resposta.status(204).json(curso);
   },
 };
