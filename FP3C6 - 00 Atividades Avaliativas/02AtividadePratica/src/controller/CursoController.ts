@@ -55,43 +55,95 @@ export default {
   async index(requisicao: Request, resposta: Response) {
     const cursoRepository = AppDataSource.getRepository(Curso);
     const cursos = cursoRepository.find();
+    console.log(cursos);
+
     return resposta.status(201).json(cursos);
   },
 
-  async update(requisicao: Request, resposta: Response) {},
-
-  // Tratar exceções, passar validação, tal como em disciplina
-  async delete(requisicao: Request, resposta: Response) {
+  async update(requisicao: Request, resposta: Response) {
+    // Código do curso a ser atualizado
     const { codigo } = requisicao.params;
 
-    if (codigo == null)
-      return resposta
-        .status(406)
-        .json({ erro: 'Código de curso não informado.' });
-
-    const cursoRepository = AppDataSource.getRepository(Curso);
-
-    const curso = await cursoRepository.findOne({
-      where: {
-        codigo: +codigo,
-      },
-      relations: {
-        disciplinas: true,
-      },
+    const regras = Yup.object().shape({
+      nome: Yup.string().required('Informe um nome de curso.'),
+      periodo: Yup.string().required('Informe um período.'),
+      nivel: Yup.number().positive().integer().required('Informe um nível.'),
     });
 
-    if (curso) {
-      if (curso.disciplinas.length == 0)
-        // Não tem disciplinas, pode remover
-        await cursoRepository.remove(curso);
-      else
+    try {
+      const curso = await regras.validate(requisicao.body, {
+        abortEarly: false,
+      });
+
+      // buscar o curso
+      const cursoRepository = AppDataSource.getRepository(Curso);
+      const cursoBuscar = await cursoRepository.findOne({
+        where: {
+          codigo: +codigo,
+        },
+      });
+
+      if (cursoBuscar) {
+        const nivelRepository = AppDataSource.getRepository(Nivel);
+        const nivel = await nivelRepository.findOne({
+          where: {
+            codigo: curso.nivel,
+          },
+        });
+
+        if (nivel) {
+          const cursoAtualizar = cursoRepository.update(
+            {
+              codigo: +codigo,
+            },
+            { nome: curso.nome, periodo: curso.periodo, nivel }
+          );
+          return resposta.status(201).json(cursoAtualizar);
+        }
+        return resposta.status(404).json({ erro: 'Nível não existente.' });
+      }
+      return resposta.status(404).json({ erro: 'Curso não existente.' });
+    } catch (error: any) {
+      // Apresenta os erros que surgem da validação
+      console.log(error);
+      resposta.status(400).json({ Erro: error.errors });
+    }
+  },
+
+  async delete(requisicao: Request, resposta: Response) {
+    const regras = Yup.object().shape({
+      codigo: Yup.number().positive().integer().required('Informe uma curso.'),
+    });
+
+    try {
+      const cursoExcluir = await regras.validate(requisicao.body, {
+        abortEarly: false,
+      });
+
+      const cursoRepository = AppDataSource.getRepository(Curso);
+      const curso = await cursoRepository.findOne({
+        where: {
+          codigo: +cursoExcluir.codigo,
+        },
+        relations: {
+          disciplinas: true,
+        },
+      });
+
+      if (curso) {
+        if (curso.disciplinas.length == 0) {
+          await cursoRepository.remove(curso);
+          return resposta.status(201).json(Curso);
+        }
         return resposta.status(406).json({
           erro: 'Curso não pode ser excluido. Possui disciplinas vinculadas',
         });
-      // Tem disciplinas, não pode remover
-    } else return resposta.status(404).json({ erro: 'Curso não existe.' });
-
-    return resposta.status(204).json(curso);
+      }
+      return resposta.status(404).json({ erro: 'Curso não existe.' });
+    } catch (error: any) {
+      console.log(error);
+      resposta.status(400).json({ Erro: error.errors });
+    }
   },
 
   async findByNivel(requisicao: Request, resposta: Response) {

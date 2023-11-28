@@ -8,6 +8,7 @@ routes.get('/curso/nivel/:nivel', CursoController.findByNivel);
 routes.get('/curso/nome/:nome', CursoController.findByNome);
 routes.get('/curso', CursoController.index);
 routes.post('/curso', CursoController.create);
+routes.put('/curso/:codigo', CursoController.update);
 routes.delete('/curso/:codigo', CursoController.delete);
 
 routes.get('/disciplinas/:nome', DisciplinaController.findByNome);
