@@ -6,15 +6,15 @@ import { AppDataSource } from '../data-source';
 import Disciplina from '../models/Disciplina';
 import Curso from '../models/Curso';
 
+const regrasDisciplina = Yup.object().shape({
+  nome: Yup.string().required('Informe um nome para a disciplina'),
+  curso: Yup.number().positive().integer().required('Informe um curso.'),
+});
+
 export default {
   async create(requisicao: Request, resposta: Response) {
-    const regras = Yup.object().shape({
-      nome: Yup.string().required('Informe um nome para a disciplina'),
-      curso: Yup.number().positive().integer().required('Informe um curso.'),
-    });
-
     try {
-      const disciplina = await regras.validate(requisicao.body, {
+      const disciplina = await regrasDisciplina.validate(requisicao.body, {
         abortEarly: false,
       });
 
@@ -50,7 +50,49 @@ export default {
     return resposta.status(201).json(disciplinas);
   },
 
-  async update(requisicao: Request, resposta: Response) {},
+  async update(requisicao: Request, resposta: Response) {
+    const { codigo } = requisicao.params;
+    try {
+      const disciplina = await regrasDisciplina.validate(requisicao.body, {
+        abortEarly: false,
+      });
+
+      // Buscar disciplina para ver se existe
+      const disciplinaRepository = AppDataSource.getRepository(Disciplina);
+      const disciplinaBuscar = await disciplinaRepository.findOne({
+        where: {
+          codigo: +codigo,
+        },
+      });
+
+      if (disciplinaBuscar) {
+        const cursoRepository = AppDataSource.getRepository(Curso);
+        const cursoDisciplina = await cursoRepository.findOne({
+          where: {
+            codigo: disciplina.curso,
+          },
+        });
+
+        if (cursoDisciplina) {
+          const disciplinaSalvar = disciplinaRepository.update(
+            {
+              codigo: +codigo,
+            },
+            {
+              nome: disciplina.nome,
+              //curso: disciplina.curso,
+            }
+          );
+          return resposta.status(201).json(disciplinaSalvar);
+        }
+        return resposta.status(404).json({ erro: 'Curso não existe.' });
+      }
+      return resposta.status(404).json({ erro: 'Disciplina não existe.' });
+    } catch (error: any) {
+      console.log(error);
+      resposta.status(400).json({ Erro: error.errors });
+    }
+  },
 
   async delete(requisicao: Request, resposta: Response) {
     const regras = Yup.object().shape({
@@ -75,7 +117,8 @@ export default {
       if (disciplinaRemover) {
         await disciplinaRepository.remove(disciplinaRemover);
         return resposta.status(204).json(disciplinaRemover);
-      } else return resposta.status(404).json({ erro: 'Disciplina não existe.' });
+      } else
+        return resposta.status(404).json({ erro: 'Disciplina não existe.' });
     } catch (error: any) {
       console.log(error);
       resposta.status(400).json({ Erro: error.errors });
