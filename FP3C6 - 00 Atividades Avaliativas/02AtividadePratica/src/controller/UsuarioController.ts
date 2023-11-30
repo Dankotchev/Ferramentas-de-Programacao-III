@@ -4,17 +4,6 @@ import * as Yup from 'yup';
 import { AppDataSource } from '../data-source';
 import Usuario from '../models/Usuario';
 
-const usuarios = [
-  {
-    email: 'user1@email.com',
-    senha: 'user1',
-  },
-  {
-    email: 'user2@email.com',
-    senha: 'user2',
-  },
-];
-
 const regras = Yup.object().shape({
   email: Yup.string()
     .email('Informe um e-mail válido')

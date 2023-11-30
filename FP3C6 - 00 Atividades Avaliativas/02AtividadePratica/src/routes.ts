@@ -2,6 +2,7 @@ import { Router } from 'express';
 import CursoController from './controller/CursoController';
 import DisciplinaController from './controller/DisciplinaController';
 import UsuarioController from './controller/UsuarioController';
+import Authentication from './middleware/Authentication';
 
 const routes = Router();
 
@@ -16,6 +17,7 @@ routes.get('/disciplinas/:nome', DisciplinaController.findByNome);
 routes.post('/disciplinas', DisciplinaController.create);
 routes.delete('/disciplinas/:codigo', DisciplinaController.delete);
 
-routes.post("/login", UsuarioController.login);
+routes.post('/login', UsuarioController.login);
+routes.get('/usuario', Authentication.validate ,UsuarioController.index);
 
 export default routes;

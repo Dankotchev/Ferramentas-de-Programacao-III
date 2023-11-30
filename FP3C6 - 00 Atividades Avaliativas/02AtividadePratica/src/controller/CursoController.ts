@@ -6,15 +6,15 @@ import { AppDataSource } from '../data-source';
 import Curso from '../models/Curso';
 import Nivel from '../models/Nivel';
 
+// Regras de validação
+const regras = Yup.object().shape({
+  nome: Yup.string().required('Informe um nome de curso.'),
+  periodo: Yup.string().required('Informe um período.'),
+  nivel: Yup.number().positive().integer().required('Informe um nível.'),
+});
+
 export default {
   async create(requisicao: Request, resposta: Response) {
-    // Regras de validação
-    const regras = Yup.object().shape({
-      nome: Yup.string().required('Informe um nome de curso.'),
-      periodo: Yup.string().required('Informe um período.'),
-      nivel: Yup.number().positive().integer().required('Informe um nível.'),
-    });
-
     // Validação
     try {
       const curso = await regras.validate(requisicao.body, {
@@ -63,13 +63,6 @@ export default {
   async update(requisicao: Request, resposta: Response) {
     // Código do curso a ser atualizado
     const { codigo } = requisicao.params;
-
-    const regras = Yup.object().shape({
-      nome: Yup.string().required('Informe um nome de curso.'),
-      periodo: Yup.string().required('Informe um período.'),
-      nivel: Yup.number().positive().integer().required('Informe um nível.'),
-    });
-
     try {
       const curso = await regras.validate(requisicao.body, {
         abortEarly: false,
@@ -111,12 +104,12 @@ export default {
   },
 
   async delete(requisicao: Request, resposta: Response) {
-    const regras = Yup.object().shape({
+    const regrasDeletar = Yup.object().shape({
       codigo: Yup.number().positive().integer().required('Informe uma curso.'),
     });
 
     try {
-      const cursoExcluir = await regras.validate(requisicao.body, {
+      const cursoExcluir = await regrasDeletar.validate(requisicao.body, {
         abortEarly: false,
       });
 
