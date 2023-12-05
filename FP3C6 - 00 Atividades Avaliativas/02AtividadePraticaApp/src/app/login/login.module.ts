@@ -17,4 +17,4 @@ import { Tab1PageRoutingModule } from './login-routing.module';
   ],
   declarations: [LoginPage]
 })
-export class Tab1PageModule {}
+export class LoginPageModule {}

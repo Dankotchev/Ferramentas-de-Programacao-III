@@ -15,7 +15,7 @@ export default {
   // Função privada, atrás do Middleware
   async index(requisicao: Request, resposta: Response) {
     const usuarioRepository = AppDataSource.getRepository(Usuario);
-    const usuarios = usuarioRepository.find();
+    const usuarios = await usuarioRepository.find();
     resposta.status(200).json(usuarios);
   },
 
@@ -28,7 +28,7 @@ export default {
 
       // Busca se usuário existe
       const usuarioRepository = AppDataSource.getRepository(Usuario);
-      const usuario = await usuarioRepository.find({
+      const usuario = await usuarioRepository.findOne({
         where: {
           email: usuarioRequisicao.email,
           senha: usuarioRequisicao.senha,

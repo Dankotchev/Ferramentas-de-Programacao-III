@@ -22,11 +22,14 @@ export class LoginPage implements OnInit {
       email: this.email,
       senha: this.senha,
     };
-    const retorno = await this.authentication.login(usuario);
+    console.log(usuario);
 
+    const retorno = await this.authentication.login(usuario);
+    console.log(retorno);
+    
     if (retorno) {
       console.log('Login OK');
-      this.router.navigate(["/home"]);
+      this.router.navigate(["/tabs/home"]);
     } else {
       console.log('Login failed.');
     }

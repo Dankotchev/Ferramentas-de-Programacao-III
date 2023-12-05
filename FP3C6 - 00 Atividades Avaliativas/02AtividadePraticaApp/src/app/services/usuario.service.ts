@@ -24,7 +24,7 @@ export class UsuarioService {
 
   findAll() {
     return this.http
-      .get(`${this.baseUrl}/users`, this.getHttpOptions())
+      .get(`${this.baseUrl}/usuario`, this.getHttpOptions())
       .toPromise();
   }
 }

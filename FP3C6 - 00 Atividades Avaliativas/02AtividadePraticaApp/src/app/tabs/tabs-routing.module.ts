@@ -10,11 +10,11 @@ const routes: Routes = [
     children: [
       {
         path: 'login',
-        loadChildren: () => import('../login/login.module').then(m => m.Tab1PageModule)
+        loadChildren: () => import('../login/login.module').then(m => m.LoginPageModule)
       },
       {
         path: 'home',
-        loadChildren: () => import('../home/home.module').then(m => m.Tab2PageModule),
+        loadChildren: () => import('../home/home.module').then(m => m.HomePageModule),
         canActivate: [AuthorizationService]
       },
       {
