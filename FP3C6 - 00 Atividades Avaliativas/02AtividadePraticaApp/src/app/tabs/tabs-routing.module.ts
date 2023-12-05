@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { AuthorizationService } from '../services/authorization.service';
 
 const routes: Routes = [
   {
@@ -12,8 +13,9 @@ const routes: Routes = [
         loadChildren: () => import('../login/login.module').then(m => m.Tab1PageModule)
       },
       {
-        path: 'tab2',
-        loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+        path: 'home',
+        loadChildren: () => import('../home/home.module').then(m => m.Tab2PageModule),
+        canActivate: [AuthorizationService]
       },
       {
         path: 'tab3',
