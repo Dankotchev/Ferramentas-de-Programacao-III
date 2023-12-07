@@ -1,0 +1,20 @@
+<ion-header [translucent]="true">
+  <ion-toolbar><ion-title>Usuários</ion-title> </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid *ngIf="exibir()">
+    <ion-row>
+      <ion-col size="6"><strong>Nome</strong></ion-col>
+      <ion-col size="2"></ion-col>
+    </ion-row>
+    <ion-row *ngFor="user of usuarios; let i = index">
+      <ion-col size="6">{{ user.nome }}</ion-col>
+      <ion-col size="2" (click)="excluirPessoa(i)"
+        ><ion-icon name="trash"
+      /></ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <h4 *ngIf="!exibir()">Não há usuários cadastrados</h4>
+</ion-content>
