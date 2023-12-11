@@ -1,16 +1,14 @@
 {
-  "name": "avaliacao",
+  "name": "03atividade_pratica_backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "keywords": [
-    "fp3"
-  ],
+  "keywords": [],
   "scripts": {
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts"
   },
-  "author": "ifsp",
-  "license": "ISC",
+  "author": "Danilo D. Quirino",
+  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
