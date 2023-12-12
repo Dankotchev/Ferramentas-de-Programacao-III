@@ -10,7 +10,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   public deletarUser(id: number) {
-    return this.http.get(`${this.urlBase}/{id}`).toPromise();
+    return this.http.delete(`${this.urlBase}/${id}`).toPromise();
   }
 
   public getUsers() {

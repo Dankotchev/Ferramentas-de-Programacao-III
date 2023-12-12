@@ -9,8 +9,7 @@ import { UserService } from '../services/user.service';
 })
 export class HomePage {
   // Atributos
-  public usuarios: any = {};
-  public user: any = {};
+  public usuarios: any[] = [];
 
   // Construtor
   constructor(
@@ -22,36 +21,35 @@ export class HomePage {
 
   // Métodos
   private async getUsuarios() {
-    // Requisição assincrona
     this.usuarioService
       .getUsers()
-      .then((resultado) => {
+      .then((resultado: any) => {
         this.usuarios = resultado;
-        console.log(resultado);
-        console.log(this.usuarios);
       })
       .catch(() => {});
   }
 
   public exibir() {
-    if (this.usuarios) return false;
-    else return true;
+    if (this.usuarios.length != 0) return true;
+    else return false;
   }
 
-  public async excluirPessoa(id: number) {
-    const resposta = await this.usuarioService.deletarUser(id);
-    this.usuarios.splice(id, 1);
-    if (resposta) this.exibirMensagem('Usuário excluido');
-    else this.exibirMensagem('Usuário não existe');
+  public async excluirPessoa(id: number, posicao: number) {
+    try {
+      const resposta = await this.usuarioService.deletarUser(id);
+      this.usuarios.splice(posicao, 1);
+      if (resposta) this.exibirMensagem('Usuário excluido');
+    } catch (error) {
+      this.exibirMensagem('Usuário não existe');
+    }
   }
 
   async exibirMensagem(mensagem: string) {
     const toast = await this.toastController.create({
       message: mensagem,
-      duration: 550,
+      duration: 750,
       position: 'bottom',
     });
-
     await toast.present();
   }
 }

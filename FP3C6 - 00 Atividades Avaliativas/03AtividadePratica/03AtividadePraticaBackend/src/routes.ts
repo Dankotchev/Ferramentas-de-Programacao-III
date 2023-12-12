@@ -6,6 +6,6 @@ const routes = Router();
 
 routes.post('/login', UserController.login);
 routes.get('/users/:token', Authentication.validate, UserController.index);
-routes.get('/users/:token/:id', Authentication.validate, UserController.delete);
+routes.delete('/users/:token/:id', Authentication.validate, UserController.delete);
 
 export default routes;
